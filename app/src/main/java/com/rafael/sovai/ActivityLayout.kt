@@ -1,28 +1,40 @@
 package com.rafael.sovai
 
 import android.content.Context
+import android.graphics.BitmapFactory
 import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.Rect
 import android.util.AttributeSet
+import android.view.MotionEvent
 import android.view.View
+
 
 class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
-    val greenPaintStroke = Paint().apply {
-        color = Color.GREEN
-        style = Paint.Style.STROKE
-        strokeWidth = 10F
-    }
+    private var xAux = 0F
+    private var yAux = 0F
 
-    val rectangule = Rect().apply {
-        set(210, 125, 250,175)
-    }
+    private var bitmap = BitmapFactory.decodeResource(context.resources, R.mipmap.ic_bitmap)!!
+
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        canvas.drawRect(rectangule, greenPaintStroke)
+        canvas.drawBitmap(bitmap, xAux-80, yAux-80, null)
+    }
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                xAux = event.x
+                yAux = event.y
+                invalidate()
+            }
+            MotionEvent.ACTION_MOVE -> {
+                xAux = event.x
+                yAux = event.y
+                invalidate()
+            }
+        }
+        return true
     }
 }
