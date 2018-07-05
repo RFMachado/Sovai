@@ -6,25 +6,15 @@ import android.graphics.Paint.ANTI_ALIAS_FLAG
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
-import android.R.attr.y
-import android.R.attr.x
 
 class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
     private var xAux = 0F
     private var yAux = 0F
-    private val INVALID_INDEX = -1
 
     private var bitmap = BitmapFactory.decodeResource(context.resources, R.mipmap.ic_bitmap)!!
 
-    private val mItemsCollection: ArrayList<Rect>? = null
-
-    private val mActiveDragPoints: ArrayList<Point>? = null
-
-    private val mActiveRects: ArrayList<Rect>? = null
-
     var isMoving = false
-
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
