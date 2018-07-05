@@ -6,14 +6,24 @@ import android.graphics.Paint.ANTI_ALIAS_FLAG
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
-
+import android.R.attr.y
+import android.R.attr.x
 
 class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
     private var xAux = 0F
     private var yAux = 0F
+    private val INVALID_INDEX = -1
 
     private var bitmap = BitmapFactory.decodeResource(context.resources, R.mipmap.ic_bitmap)!!
+
+    private val mItemsCollection: ArrayList<Rect>? = null
+
+    private val mActiveDragPoints: ArrayList<Point>? = null
+
+    private val mActiveRects: ArrayList<Rect>? = null
+
+    var isMoving = false
 
 
     override fun onDraw(canvas: Canvas) {
@@ -22,18 +32,29 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
         val paint = createCheckerBoard(150)
 
         canvas.drawPaint(paint)
-        canvas.drawBitmap(bitmap, xAux-80, yAux-80, null)
+        canvas.drawBitmap(bitmap, xAux, yAux, null)
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
+
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
-
+                isMoving = (event.x >= xAux && event.x <= xAux + bitmap.width &&
+                        event.y >= yAux && event.y <= yAux + bitmap.height)
             }
             MotionEvent.ACTION_MOVE -> {
-                xAux = event.x
-                yAux = event.y
-                invalidate()
+                if (isMoving) {
+                    xAux = event.x - bitmap.width/2
+                    yAux = event.y - bitmap.height/2
+                    invalidate()
+                }
+            }
+            MotionEvent.ACTION_UP -> {
+                if (isMoving) {
+                    xAux = ((event.x/150).toInt()*150).toFloat()
+                    yAux = ((event.y/150).toInt()*150).toFloat()
+                    invalidate()
+                }
             }
         }
         return true
@@ -58,4 +79,5 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
         paint.shader = BitmapShader(bitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT)
         return paint
     }
+
 }
