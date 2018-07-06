@@ -11,6 +11,7 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
 
     private var xAux = 0F
     private var yAux = 0F
+    private val sizeWidth = width / 8
 
     private var bitmap = BitmapFactory.decodeResource(context.resources, R.mipmap.ic_bitmap)!!
 
@@ -19,7 +20,7 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        val paint = createCheckerBoard(150)
+        val paint = createCheckerBoard(sizeWidth)
 
         canvas.drawPaint(paint)
         canvas.drawBitmap(bitmap, xAux, yAux, null)
@@ -41,8 +42,8 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
             }
             MotionEvent.ACTION_UP -> {
                 if (isMoving) {
-                    xAux = ((event.x/150).toInt()*150).toFloat()
-                    yAux = ((event.y/150).toInt()*150).toFloat()
+                    xAux = ((event.x/sizeWidth).toInt()*sizeWidth).toFloat()
+                    yAux = ((event.y/sizeWidth).toInt()*sizeWidth).toFloat()
                     invalidate()
                 }
             }
@@ -50,19 +51,19 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
         return true
     }
 
-    private fun createCheckerBoard(pixelSize: Int): Paint {
-        val bitmap = Bitmap.createBitmap(pixelSize * 2, pixelSize * 2, Bitmap.Config.ARGB_8888)
+    private fun createCheckerBoard(size: Int): Paint {
+        val bitmap = Bitmap.createBitmap(size * 2, size * 2, Bitmap.Config.ARGB_8888)
 
         val fill = Paint(ANTI_ALIAS_FLAG)
         fill.style = Paint.Style.FILL
         fill.color = Color.BLACK
 
         val canvas = Canvas(bitmap)
-        val rect = Rect(0, 0, pixelSize, pixelSize)
+        val rect = Rect(0, 0, size, size)
 
         canvas.drawRect(rect, fill)
 
-        rect.offset(pixelSize, pixelSize)
+        rect.offset(size, size)
         canvas.drawRect(rect, fill)
 
         val paint = Paint(ANTI_ALIAS_FLAG)
