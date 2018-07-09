@@ -11,15 +11,17 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
 
     private var xAux = 0F
     private var yAux = 0F
-    private val sizeWidth = width / 8
 
     private var bitmap = BitmapFactory.decodeResource(context.resources, R.mipmap.ic_bitmap)!!
+    var size: Int = 0
 
-    var isMoving = false
+    private var isMoving = false
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
+        val sizeWidth = width / 8
+        size = sizeWidth
         val paint = createCheckerBoard(sizeWidth)
 
         canvas.drawPaint(paint)
@@ -42,8 +44,8 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
             }
             MotionEvent.ACTION_UP -> {
                 if (isMoving) {
-                    xAux = ((event.x/sizeWidth).toInt()*sizeWidth).toFloat()
-                    yAux = ((event.y/sizeWidth).toInt()*sizeWidth).toFloat()
+                    xAux = ((event.x/size).toInt()*size).toFloat()
+                    yAux = ((event.y/size).toInt()*size).toFloat()
                     invalidate()
                 }
             }
@@ -69,6 +71,10 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
         val paint = Paint(ANTI_ALIAS_FLAG)
         paint.shader = BitmapShader(bitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT)
         return paint
+    }
+
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        super.onMeasure(widthMeasureSpec, widthMeasureSpec)
     }
 
 }
