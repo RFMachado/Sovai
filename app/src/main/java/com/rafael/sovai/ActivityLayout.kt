@@ -6,51 +6,32 @@ import android.graphics.Paint.ANTI_ALIAS_FLAG
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import com.rafael.sovai.models.Piece
 
 class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attrs) {
+    private val piece1 = Piece(context, attrs,0F, 0F)
+    private val piece2 = Piece(context, attrs,250F, 250F)
+    private val piece3 = Piece(context, attrs,450F, 450F)
 
-    private var xAux = 0F
-    private var yAux = 0F
-
-    private var bitmap = BitmapFactory.decodeResource(context.resources, R.mipmap.ic_bitmap)!!
+    private val listObject: MutableList<Piece> = mutableListOf(piece1, piece2, piece3)
     var size: Int = 0
-
-    private var isMoving = false
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
         val sizeWidth = width / 8
         size = sizeWidth
+
         val paint = createCheckerBoard(sizeWidth)
 
         canvas.drawPaint(paint)
-        canvas.drawBitmap(bitmap, xAux, yAux, null)
-    }
+        canvas.drawBitmap(piece1.bitmap, piece1.getx(), piece1.gety(), null)
+        canvas.drawBitmap(piece2.bitmap, piece2.getx(), piece2.gety(), null)
+        canvas.drawBitmap(piece3.bitmap, piece3.getx(), piece3.gety(), null)
 
-    override fun onTouchEvent(event: MotionEvent): Boolean {
-
-        when (event.action) {
-            MotionEvent.ACTION_DOWN -> {
-                isMoving = (event.x >= xAux && event.x <= xAux + bitmap.width &&
-                        event.y >= yAux && event.y <= yAux + bitmap.height)
-            }
-            MotionEvent.ACTION_MOVE -> {
-                if (isMoving) {
-                    xAux = event.x - bitmap.width/2
-                    yAux = event.y - bitmap.height/2
-                    invalidate()
-                }
-            }
-            MotionEvent.ACTION_UP -> {
-                if (isMoving) {
-                    xAux = ((event.x/size).toInt()*size).toFloat()
-                    yAux = ((event.y/size).toInt()*size).toFloat()
-                    invalidate()
-                }
-            }
-        }
-        return true
+        piece1.updateAxis(piece1.getx(), piece1.gety())
+        piece2.updateAxis(piece2.getx(), piece2.gety())
+        piece3.updateAxis(piece3.getx(), piece3.gety())
     }
 
     private fun createCheckerBoard(size: Int): Paint {
@@ -71,6 +52,38 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
         val paint = Paint(ANTI_ALIAS_FLAG)
         paint.shader = BitmapShader(bitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT)
         return paint
+    }
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+
+        for(i in 0..(listObject.size-1)) {
+            val piece = listObject[i]
+            val x = piece.getx()
+            val y = piece.gety()
+
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    piece.isMoving = (event.x >= x && event.x <= x + piece.bitmap.width &&
+                            event.y >= y && event.y <= y + piece.bitmap.height)
+
+                }
+                MotionEvent.ACTION_MOVE -> {
+                    if (piece.isMoving) {
+                        piece.updateAxis(event.x - piece.bitmap.width / 2, event.y - piece.bitmap.height / 2)
+                        invalidate()
+                    }
+                }
+                MotionEvent.ACTION_UP -> {
+                    if (piece.isMoving) {
+                        piece.updateAxis(((event.x / size).toInt() * size).toFloat(), ((event.y / size).toInt() * size).toFloat())
+                        piece.isMoving = false
+                        invalidate()
+                    }
+                }
+            }
+        }
+
+        return true
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
