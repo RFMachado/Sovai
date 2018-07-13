@@ -10,10 +10,11 @@ import com.rafael.sovai.models.Piece
 
 class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attrs) {
     private val piece1 = Piece(context,0F, 0F)
-    private val piece2 = Piece(context,250F, 250F)
-    private val piece3 = Piece(context,450F, 450F)
+    private val piece2 = Piece(context,140F, 140F)
+    private val piece3 = Piece(context,0F, 140F)
+    private val piece4 = Piece(context,140F, 0F)
 
-    private val listObject: MutableList<Piece> = mutableListOf(piece1, piece2, piece3)
+    private val listObject: MutableList<Piece> = mutableListOf(piece1, piece2, piece3, piece4)
     var size: Int = 0
 
     override fun onDraw(canvas: Canvas) {
@@ -28,10 +29,12 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
         canvas.drawBitmap(piece1.bitmap, piece1.getx(), piece1.gety(), null)
         canvas.drawBitmap(piece2.bitmap, piece2.getx(), piece2.gety(), null)
         canvas.drawBitmap(piece3.bitmap, piece3.getx(), piece3.gety(), null)
+        canvas.drawBitmap(piece4.bitmap, piece4.getx(), piece4.gety(), null)
 
         piece1.updateAxis(piece1.getx(), piece1.gety())
         piece2.updateAxis(piece2.getx(), piece2.gety())
         piece3.updateAxis(piece3.getx(), piece3.gety())
+        piece4.updateAxis(piece4.getx(), piece4.gety())
     }
 
     private fun createCheckerBoard(size: Int): Paint {
