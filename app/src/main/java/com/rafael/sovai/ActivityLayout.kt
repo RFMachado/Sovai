@@ -9,9 +9,9 @@ import android.view.View
 import com.rafael.sovai.models.Piece
 
 class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attrs) {
-    private val piece1 = Piece(context, attrs,0F, 0F)
-    private val piece2 = Piece(context, attrs,250F, 250F)
-    private val piece3 = Piece(context, attrs,450F, 450F)
+    private val piece1 = Piece(context,0F, 0F)
+    private val piece2 = Piece(context,250F, 250F)
+    private val piece3 = Piece(context,450F, 450F)
 
     private val listObject: MutableList<Piece> = mutableListOf(piece1, piece2, piece3)
     var size: Int = 0
