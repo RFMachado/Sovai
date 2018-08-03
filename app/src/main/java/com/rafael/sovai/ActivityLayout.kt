@@ -10,9 +10,9 @@ import com.rafael.sovai.models.Piece
 
 class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attrs) {
     private val piece1 = Piece(context,0F, 0F)
-    private val piece2 = Piece(context,140F, 140F)
-    private val piece3 = Piece(context,0F, 140F)
-    private val piece4 = Piece(context,140F, 0F)
+    private val piece2 = Piece(context,100F, 100F)
+    private val piece3 = Piece(context,0F, 100F)
+    private val piece4 = Piece(context,100F, 0F)
 
     private val listObject: MutableList<Piece> = mutableListOf(piece1, piece2, piece3, piece4)
     var size: Int = 0
@@ -78,7 +78,10 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
                 }
                 MotionEvent.ACTION_UP -> {
                     if (piece.isMoving) {
-                        piece.updateAxis(((event.x / size).toInt() * size).toFloat(), ((event.y / size).toInt() * size).toFloat())
+                        piece.xmatrix = (event.x / size).toInt()
+                        piece.ymatrix = (event.y / size).toInt()
+                        piece.updateAxis(piece.xmatrix * size.toFloat(), piece.ymatrix * size.toFloat() )
+
                         piece.isMoving = false
                         invalidate()
                     }
