@@ -106,7 +106,7 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
                         } else {
                             piece.updateAxis(piece.xmatrix * size.toFloat(), piece.ymatrix * size.toFloat())
                             matrix[piece.xmatrix][piece.ymatrix] = 1
-                            println(">> lastPosition x=>${piece.lastPositionX}  y=>${piece.lastPositionY} size=>$size")
+                            matrix[piece.lastPositionX.toInt()/size][piece.lastPositionY.toInt()/size] = 0
                         }
 
                         piece.isMoving = false
