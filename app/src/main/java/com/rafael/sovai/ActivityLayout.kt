@@ -19,6 +19,17 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
     private val piece7 = Piece(context,7F, 6F)
     private val piece8 = Piece(context,7F, 7F)
 
+    var matrix = arrayOf(
+            intArrayOf(1, 1, 0, 0, 0, 0, 0, 0),
+            intArrayOf(1, 1, 0, 0, 0, 0, 0, 0),
+            intArrayOf(0, 0, 0, 0, 0, 0, 0, 0),
+            intArrayOf(0, 0, 0, 0, 0, 0, 0, 0),
+            intArrayOf(0, 0, 0, 0, 0, 0, 0, 0),
+            intArrayOf(0, 0, 0, 0, 0, 0, 0, 0),
+            intArrayOf(0, 0, 0, 0, 0, 0, 1, 1),
+            intArrayOf(0, 0, 0, 0, 0, 0, 1, 1)
+    )
+
     private val listPiece: MutableList<Piece> = mutableListOf(piece1, piece2, piece3, piece4, piece5, piece6, piece7, piece8)
     var size: Int = 0
 
@@ -74,25 +85,29 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
 
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
-                    println("ACTION_DOWN")
                     piece.updateLastPosition(piece.movingX, piece.movingY)
                     piece.isMoving = (event.x >= x && event.x <= x + piece.bitmap.width &&
                             event.y >= y && event.y <= y + piece.bitmap.height)
 
                 }
                 MotionEvent.ACTION_MOVE -> {
-                    println("ACTION_MOVE")
                     if (piece.isMoving) {
                         piece.updateAxis(event.x - piece.bitmap.width / 2, event.y - piece.bitmap.height / 2)
                         invalidate()
                     }
                 }
                 MotionEvent.ACTION_UP -> {
-                    println("ACTION_UP")
                     if (piece.isMoving) {
                         piece.xmatrix = (event.x / size).toInt()
                         piece.ymatrix = (event.y / size).toInt()
-                        piece.updateAxis(piece.xmatrix * size.toFloat(), piece.ymatrix * size.toFloat() )
+
+                        if (matrix[piece.xmatrix][piece.ymatrix] == 1) {
+                            piece.updateAxis(piece.lastPositionX, piece.lastPositionY )
+                        } else {
+                            piece.updateAxis(piece.xmatrix * size.toFloat(), piece.ymatrix * size.toFloat())
+                            matrix[piece.xmatrix][piece.ymatrix] = 1
+                            println(">> lastPosition x=>${piece.lastPositionX}  y=>${piece.lastPositionY} size=>$size")
+                        }
 
                         piece.isMoving = false
                         invalidate()
