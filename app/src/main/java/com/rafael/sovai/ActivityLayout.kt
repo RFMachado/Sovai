@@ -19,7 +19,7 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
     private val piece7 = Piece(context,7F, 6F)
     private val piece8 = Piece(context,7F, 7F)
 
-    private val listObject: MutableList<Piece> = mutableListOf(piece1, piece2, piece3, piece4, piece5, piece6, piece7, piece8)
+    private val listPiece: MutableList<Piece> = mutableListOf(piece1, piece2, piece3, piece4, piece5, piece6, piece7, piece8)
     var size: Int = 0
 
     override fun onDraw(canvas: Canvas) {
@@ -27,32 +27,18 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
 
         val sizeWidth = width / 8
         val paint = createCheckerBoard(sizeWidth)
-        var multply = 1
+        var mulitply = 1
 
         if (size == 0) {
-            multply = sizeWidth
+            mulitply = sizeWidth
         }
 
         canvas.drawPaint(paint)
-        canvas.drawBitmap(piece1.bitmap, piece1.getx() * multply, piece1.gety() * multply, null)
-        canvas.drawBitmap(piece2.bitmap, piece2.getx() * multply, piece2.gety() * multply, null)
-        canvas.drawBitmap(piece3.bitmap, piece3.getx() * multply, piece3.gety() * multply, null)
-        canvas.drawBitmap(piece4.bitmap, piece4.getx() * multply, piece4.gety() * multply, null)
 
-        canvas.drawBitmap(piece5.bitmap, piece5.getx() * multply, piece5.gety() * multply, null)
-        canvas.drawBitmap(piece6.bitmap, piece6.getx() * multply, piece6.gety() * multply, null)
-        canvas.drawBitmap(piece7.bitmap, piece7.getx() * multply, piece7.gety() * multply, null)
-        canvas.drawBitmap(piece8.bitmap, piece8.getx() * multply, piece8.gety() * multply, null)
-
-        piece1.updateAxis(piece1.getx() * multply, piece1.gety() * multply)
-        piece2.updateAxis(piece2.getx() * multply, piece2.gety() * multply)
-        piece3.updateAxis(piece3.getx() * multply, piece3.gety() * multply)
-        piece4.updateAxis(piece4.getx() * multply, piece4.gety() * multply)
-
-        piece5.updateAxis(piece5.getx() * multply, piece5.gety() * multply)
-        piece6.updateAxis(piece6.getx() * multply, piece6.gety() * multply)
-        piece7.updateAxis(piece7.getx() * multply, piece7.gety() * multply)
-        piece8.updateAxis(piece8.getx() * multply, piece8.gety() * multply)
+        listPiece.forEach { piece ->
+            canvas.drawBitmap(piece.bitmap, piece.getx() * mulitply, piece.gety() * mulitply, null)
+            piece.updateAxis(piece.getx() * mulitply, piece.gety() * mulitply)
+        }
 
         size = sizeWidth
 
@@ -81,8 +67,8 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
 
-        for(i in 0 until listObject.size) {
-            val piece = listObject[i]
+        for(i in 0 until listPiece.size) {
+            val piece = listPiece[i]
             val x = piece.getx()
             val y = piece.gety()
 
