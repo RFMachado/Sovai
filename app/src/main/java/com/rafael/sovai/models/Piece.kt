@@ -6,23 +6,29 @@ import com.rafael.sovai.R
 
 class Piece(context: Context, x: Float, y: Float) {
 
-    private var currentX = x
-    private var currentY = y
+    var movingX = x
+    var movingY = y
     var isMoving = false
-    val player: Int = 0
+    var player: Int = 0
     var xmatrix: Int = 0
     var ymatrix: Int = 0
+    var lastPositionX: Float = 0f
+    var lastPositionY: Float = 0f
 
     var bitmap = BitmapFactory.decodeResource(context.resources, R.mipmap.ic_bitmap)!!
     var size: Int = 0
 
     fun updateAxis(x: Float, y: Float) {
-        currentX = x
-        currentY = y
+        movingX = x
+        movingY = y
     }
 
-    fun getx(): Float = currentX
-    fun gety(): Float = currentY
+    fun getx(): Float = movingX
+    fun gety(): Float = movingY
 
+    fun updateLastPosition(x: Float, y: Float) {
+        lastPositionX = x
+        lastPositionY = y
+    }
 
 }
