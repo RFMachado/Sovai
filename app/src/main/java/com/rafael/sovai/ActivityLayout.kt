@@ -36,6 +36,7 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
     )
 
     private val listPiece: MutableList<Piece> = mutableListOf(piece1, piece2, piece3, piece4, piece5, piece6, piece7, piece8)
+    lateinit var currentPiece: Piece
     var size: Int = 0
 
     @RequiresApi(Build.VERSION_CODES.KITKAT)
@@ -84,45 +85,43 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
     override fun onTouchEvent(event: MotionEvent): Boolean {
 
         for(i in 0 until listPiece.size) {
-            val piece = listPiece[i]
-            val x = piece.getx()
-            val y = piece.gety()
+            currentPiece = listPiece[i]
+            val x = currentPiece.getx()
+            val y = currentPiece.gety()
 
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
-                    piece.updateLastPosition(piece.movingX, piece.movingY)
-                    piece.isMoving = (event.x >= x && event.x <= x + piece.icon.width &&
-                            event.y >= y && event.y <= y + piece.icon.height)
+                    currentPiece.updateLastPosition(currentPiece.movingX, currentPiece.movingY)
+                    currentPiece.isMoving = (event.x >= x && event.x <= x + currentPiece.icon.width &&
+                            event.y >= y && event.y <= y + currentPiece.icon.height)
 
                 }
                 MotionEvent.ACTION_MOVE -> {
-                    if (piece.isMoving) {
-                        piece.updateAxis(event.x - piece.icon.width / 2, event.y - piece.icon.height / 2)
+                    if (currentPiece.isMoving) {
+                        currentPiece.updateAxis(event.x - currentPiece.icon.width / 2, event.y - currentPiece.icon.height / 2)
                         invalidate()
                     }
                 }
                 MotionEvent.ACTION_UP -> {
-                    if (piece.isMoving) {
-                        piece.xmatrix = (event.x / size).toInt()
-                        piece.ymatrix = (event.y / size).toInt()
+                    if (currentPiece.isMoving) {
+                        currentPiece.xmatrix = (event.x / size).toInt()
+                        currentPiece.ymatrix = (event.y / size).toInt()
 
-                        if (canMoveOneStep(piece)) {
+                        if (canMoveOneStep()) {
 
-                            if (needToJump(piece)) {
-
-                                if (!jump(piece))
-                                    moveBack(piece)
+                            if (needToJump()) {
+                                jump()
 
                             } else {
-                                piece.updateAxis(piece.xmatrix * size.toFloat(), piece.ymatrix * size.toFloat())
-                                updateMatrix(piece, piece.xmatrix, piece.ymatrix)
+                                currentPiece.updateAxis(currentPiece.xmatrix * size.toFloat(), currentPiece.ymatrix * size.toFloat())
+                                updateMatrix(currentPiece.xmatrix, currentPiece.ymatrix)
                             }
 
                         } else {
-                            moveBack(piece)
+                            moveBack()
                         }
 
-                        piece.isMoving = false
+                        currentPiece.isMoving = false
                         invalidate()
                     }
                 }
@@ -132,49 +131,47 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
         return true
     }
 
-    private fun updateMatrix(piece: Piece, x: Int, y: Int) = with(piece) {
+    private fun updateMatrix(x: Int, y: Int) = with(currentPiece) {
         matrix[x][y] = player
         matrix[lastPositionX.toInt()/size][lastPositionY.toInt()/size] = 0
     }
 
-    private fun jump(piece: Piece): Boolean {
+    private fun jump() = with(currentPiece) {
+        if (matrix[xmatrix][ymatrix] == player) {
+            val diffX = xmatrix - lastPositionX.toInt()/size
+            val diffY = ymatrix - lastPositionY.toInt()/size
 
-        if (matrix[piece.xmatrix][piece.ymatrix] == piece.player) {
-            val diffX = piece.xmatrix - piece.lastPositionX.toInt()/size
-            val diffY = piece.ymatrix - piece.lastPositionY.toInt()/size
-
-            val jumpX= piece.xmatrix + diffX
-            val jumpY= piece.ymatrix + diffY
+            val jumpX= xmatrix + diffX
+            val jumpY= ymatrix + diffY
 
             if (jumpX in 0..7 && jumpY in 0..7) {
 
                 if (matrix[jumpX][jumpY] == 0) {
-                    piece.updateAxis(jumpX * size.toFloat(), jumpY * size.toFloat())
-                    updateMatrix(piece, jumpX, jumpY)
-                    return true
+                    updateAxis(jumpX * size.toFloat(), jumpY * size.toFloat())
+                    updateMatrix(jumpX, jumpY)
+                    return
                 }
             }
         }
 
-        return false
-
+        moveBack()
     }
 
-    private fun canMoveOneStep(piece: Piece): Boolean {
-        val lastPositionX = piece.lastPositionX.toInt()/size
-        val lastPositionY = piece.lastPositionY.toInt()/size
+    private fun canMoveOneStep(): Boolean {
+        val lastPositionX = currentPiece.lastPositionX.toInt()/size
+        val lastPositionY = currentPiece.lastPositionY.toInt()/size
 
-        val currentX = piece.xmatrix
-        val currentY = piece.ymatrix
+        val currentX = currentPiece.xmatrix
+        val currentY = currentPiece.ymatrix
 
         return ( (currentX >= (lastPositionX - 1)) && (currentX <= (lastPositionX + 1)) &&
                 (currentY >= (lastPositionY - 1)) && (currentY <= (lastPositionY + 1)) )
 
     }
 
-    private fun needToJump(piece: Piece) = matrix[piece.xmatrix][piece.ymatrix] != 0
+    private fun needToJump() = matrix[currentPiece.xmatrix][currentPiece.ymatrix] != 0
 
-    private fun moveBack(piece: Piece) = with(piece) {
+    private fun moveBack() = with(currentPiece) {
         updateAxis(lastPositionX, lastPositionY)
     }
 
