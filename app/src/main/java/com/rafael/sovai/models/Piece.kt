@@ -12,7 +12,7 @@ class Piece(x: Float, y: Float, val player: Int, val icon: Bitmap) {
     var lastPositionX: Float = 0f
     var lastPositionY: Float = 0f
 
-    fun updateAxis(x: Float, y: Float) {
+    fun updateNextPosition(x: Float, y: Float) {
         movingX = x
         movingY = y
     }

@@ -54,7 +54,7 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
 
         listPiece.forEach { piece ->
             canvas.drawBitmap(piece.icon, piece.getx() * multiply, piece.gety() * multiply, null)
-            piece.updateAxis(piece.getx() * multiply, piece.gety() * multiply)
+            piece.updateNextPosition(piece.getx() * multiply, piece.gety() * multiply)
         }
 
         size = sizeWidth
@@ -98,7 +98,7 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
                 }
                 MotionEvent.ACTION_MOVE -> {
                     if (currentPiece.isMoving) {
-                        currentPiece.updateAxis(event.x - currentPiece.icon.width / 2, event.y - currentPiece.icon.height / 2)
+                        currentPiece.updateNextPosition(event.x - currentPiece.icon.width / 2, event.y - currentPiece.icon.height / 2)
                         invalidate()
                     }
                 }
@@ -113,7 +113,7 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
                                 jump()
 
                             } else {
-                                currentPiece.updateAxis(currentPiece.xmatrix * size.toFloat(), currentPiece.ymatrix * size.toFloat())
+                                currentPiece.updateNextPosition(currentPiece.xmatrix * size.toFloat(), currentPiece.ymatrix * size.toFloat())
                                 updateMatrix(currentPiece.xmatrix, currentPiece.ymatrix)
                             }
 
@@ -147,7 +147,7 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
             if (jumpX in 0..7 && jumpY in 0..7) {
 
                 if (matrix[jumpX][jumpY] == 0) {
-                    updateAxis(jumpX * size.toFloat(), jumpY * size.toFloat())
+                    updateNextPosition(jumpX * size.toFloat(), jumpY * size.toFloat())
                     updateMatrix(jumpX, jumpY)
                     return
                 }
@@ -172,7 +172,7 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
     private fun needToJump() = matrix[currentPiece.xmatrix][currentPiece.ymatrix] != 0
 
     private fun moveBack() = with(currentPiece) {
-        updateAxis(lastPositionX, lastPositionY)
+        updateNextPosition(lastPositionX, lastPositionY)
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
