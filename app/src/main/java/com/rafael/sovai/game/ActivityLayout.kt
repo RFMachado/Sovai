@@ -203,6 +203,15 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
     private fun restartGame() {
         matrix = initializeTable()
 
+        listPiece.clear()
+        listPiece = initializePieces()
+
+        size = 0
+
+        invalidate()
+    }
+
+    private fun initializePieces(): MutableList<Piece> {
         val piece1 = Piece(0F, 0F, 1, iconPlayerOne)
         val piece2 = Piece(1F, 0F,1, iconPlayerOne)
         val piece3 = Piece(0F, 1F,1, iconPlayerOne)
@@ -213,13 +222,7 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
         val piece7 = Piece(7F, 6F, 2, iconPlayerTwo)
         val piece8 = Piece(7F, 7F, 2, iconPlayerTwo)
 
-
-        listPiece.clear()
-        listPiece = mutableListOf(piece1, piece2, piece3, piece4, piece5, piece6, piece7, piece8)
-
-        size = 0
-
-        invalidate()
+        return mutableListOf(piece1, piece2, piece3, piece4, piece5, piece6, piece7, piece8)
     }
 
     private fun initializeTable() = arrayOf(
