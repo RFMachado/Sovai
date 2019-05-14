@@ -16,7 +16,7 @@ import com.rafael.sovai.R
 class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
     private val congrats by lazy { context.getString(R.string.congratulations) }
-    private val ok by lazy { context.getString(R.string.ok) }
+    private val playAgain by lazy { context.getString(R.string.play_again) }
     private val backMenu by lazy { context.getString(R.string.back_menu) }
 
     private val iconPlayerOne = BitmapFactory.decodeResource(context.resources, R.drawable.blue_android)!!
@@ -32,18 +32,9 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
     private val piece7 = Piece(7F, 6F, 2, iconPlayerTwo)
     private val piece8 = Piece(7F, 7F, 2, iconPlayerTwo)
 
-    private var matrix = arrayOf(
-            intArrayOf(1, 1, 0, 0, 0, 0, 0, 0),
-            intArrayOf(1, 1, 0, 0, 0, 0, 0, 0),
-            intArrayOf(0, 0, 0, 0, 0, 0, 0, 0),
-            intArrayOf(0, 0, 0, 0, 0, 0, 0, 0),
-            intArrayOf(0, 0, 0, 0, 0, 0, 0, 0),
-            intArrayOf(0, 0, 0, 0, 0, 0, 0, 0),
-            intArrayOf(0, 0, 0, 0, 0, 0, 2, 2),
-            intArrayOf(0, 0, 0, 0, 0, 0, 2, 2)
-    )
+    private var matrix = initializeTable()
 
-    private val listPiece: MutableList<Piece> = mutableListOf(piece1, piece2, piece3, piece4, piece5, piece6, piece7, piece8)
+    private var listPiece: MutableList<Piece> = mutableListOf(piece1, piece2, piece3, piece4, piece5, piece6, piece7, piece8)
     lateinit var currentPiece: Piece
     var mListener: OnCustomEventListener? = null
     var size: Int = 0
@@ -198,7 +189,9 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
     private fun showWinDialog(player: String) = AlertDialog.Builder(context).apply {
         setTitle(congrats)
         setMessage(context.getString(R.string.win, player))
-        setPositiveButton(ok) { d, _ -> }
+        setPositiveButton(playAgain) { d, _ ->
+            restartGame()
+        }
         setNegativeButton(backMenu) { _, _ ->
             mListener?.onBackMenu()
         }
@@ -206,6 +199,39 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
         create()
         show()
     }
+
+    private fun restartGame() {
+        matrix = initializeTable()
+
+        val piece1 = Piece(0F, 0F, 1, iconPlayerOne)
+        val piece2 = Piece(1F, 0F,1, iconPlayerOne)
+        val piece3 = Piece(0F, 1F,1, iconPlayerOne)
+        val piece4 = Piece(1F, 1F, 1, iconPlayerOne)
+
+        val piece5 = Piece(6F, 6F, 2, iconPlayerTwo)
+        val piece6 = Piece(6F, 7F, 2, iconPlayerTwo)
+        val piece7 = Piece(7F, 6F, 2, iconPlayerTwo)
+        val piece8 = Piece(7F, 7F, 2, iconPlayerTwo)
+
+
+        listPiece.clear()
+        listPiece = mutableListOf(piece1, piece2, piece3, piece4, piece5, piece6, piece7, piece8)
+
+        size = 0
+
+        invalidate()
+    }
+
+    private fun initializeTable() = arrayOf(
+            intArrayOf(1, 1, 0, 0, 0, 0, 0, 0),
+            intArrayOf(1, 1, 0, 0, 0, 0, 0, 0),
+            intArrayOf(0, 0, 0, 0, 0, 0, 0, 0),
+            intArrayOf(0, 0, 0, 0, 0, 0, 0, 0),
+            intArrayOf(0, 0, 0, 0, 0, 0, 0, 0),
+            intArrayOf(0, 0, 0, 0, 0, 0, 0, 0),
+            intArrayOf(0, 0, 0, 0, 0, 0, 2, 2),
+            intArrayOf(0, 0, 0, 0, 0, 0, 2, 2)
+    )
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, widthMeasureSpec)

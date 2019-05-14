@@ -2,7 +2,7 @@
     <string name="app_name">Sovai</string>
     <string name="play">Jogar</string>
     <string name="leave">Sair</string>
-    <string name="ok">OK</string>
+    <string name="play_again">Jogar Novamente</string>
     <string name="back_menu">Voltar ao menu</string>
 
     <string name="win">Player %1$s Win !</string>
