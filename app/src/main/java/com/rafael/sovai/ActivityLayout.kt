@@ -9,8 +9,14 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import com.rafael.sovai.models.Piece
+import android.support.v7.app.AlertDialog
 
 class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attrs) {
+
+    private val congrats by lazy { context.getString(R.string.congratulations) }
+    private val ok by lazy { context.getString(R.string.ok) }
+    private val backMenu by lazy { context.getString(R.string.back_menu) }
+
     private val iconPlayerOne = BitmapFactory.decodeResource(context.resources, R.drawable.blue_android)!!
     private val iconPlayerTwo = BitmapFactory.decodeResource(context.resources, R.drawable.red_android)!!
 
@@ -121,6 +127,7 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
                             moveBack()
                         }
 
+                        checkWin()
                         currentPiece.isMoving = false
                         invalidate()
                     }
@@ -129,6 +136,16 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
         }
 
         return true
+    }
+
+    private fun checkWin() {
+        if(matrix[6][6] == 1 && matrix[6][7] == 1 && matrix[7][6] == 1 && matrix[7][7] == 1) {
+            showWinDialog("1")
+        }
+
+        if(matrix[0][0] == 2 && matrix[0][1] == 2 && matrix[1][0] == 2 && matrix[1][1] == 2) {
+            showWinDialog("2")
+        }
     }
 
     private fun updateMatrix(x: Int, y: Int) = with(currentPiece) {
@@ -173,6 +190,16 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
 
     private fun moveBack() = with(currentPiece) {
         updateNextPosition(lastPositionX, lastPositionY)
+    }
+
+    private fun showWinDialog(player: String) = AlertDialog.Builder(context).apply {
+        setTitle(congrats)
+        setMessage(context.getString(R.string.win, player))
+        setPositiveButton(ok) { _, _ -> }
+        setNegativeButton(backMenu) { _, _ -> }
+
+        create()
+        show()
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
