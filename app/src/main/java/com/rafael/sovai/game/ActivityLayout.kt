@@ -1,4 +1,4 @@
-package com.rafael.sovai
+package com.rafael.sovai.game
 
 import android.content.Context
 import android.graphics.*
@@ -8,8 +8,10 @@ import android.support.annotation.RequiresApi
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
-import com.rafael.sovai.models.Piece
+import com.rafael.sovai.game.models.Piece
 import android.support.v7.app.AlertDialog
+import com.rafael.sovai.main.OnCustomEventListener
+import com.rafael.sovai.R
 
 class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attrs) {
 

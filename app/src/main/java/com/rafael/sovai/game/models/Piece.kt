@@ -1,4 +1,4 @@
-package com.rafael.sovai.models
+package com.rafael.sovai.game.models
 
 import android.graphics.Bitmap
 

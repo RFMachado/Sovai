@@ -1,7 +1,10 @@
-package com.rafael.sovai
+package com.rafael.sovai.game
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import com.rafael.sovai.main.MainActivity
+import com.rafael.sovai.main.OnCustomEventListener
+import com.rafael.sovai.R
 import kotlinx.android.synthetic.main.activity_game.*
 
 
