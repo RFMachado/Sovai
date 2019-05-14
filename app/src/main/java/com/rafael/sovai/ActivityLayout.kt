@@ -110,12 +110,11 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
 
                             if (needToJump(piece)) {
 
-                                makeMove(piece)
+                                canJump(piece)
 
                             } else {
                                 piece.updateAxis(piece.xmatrix * size.toFloat(), piece.ymatrix * size.toFloat())
-                                matrix[piece.xmatrix][piece.ymatrix] = piece.player
-                                matrix[piece.lastPositionX.toInt()/size][piece.lastPositionY.toInt()/size] = 0
+                                updateMatrix(piece, piece.xmatrix, piece.ymatrix)
                             }
 
                         } else {
@@ -132,7 +131,12 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
         return true
     }
 
-    private fun makeMove(piece: Piece) {
+    private fun updateMatrix(piece: Piece, x: Int, y: Int) = with(piece) {
+        matrix[x][y] = player
+        matrix[lastPositionX.toInt()/size][lastPositionY.toInt()/size] = 0
+    }
+
+    private fun canJump(piece: Piece) {
 
         if (matrix[piece.xmatrix][piece.ymatrix] == piece.player) {
             val diffX = piece.xmatrix - piece.lastPositionX.toInt()/size
@@ -145,9 +149,7 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
 
                 if (matrix[jumpX][jumpY] == 0) {
                     piece.updateAxis(jumpX * size.toFloat(), jumpY * size.toFloat())
-                    matrix[jumpX][jumpY] = piece.player
-                    matrix[piece.lastPositionX.toInt()/size][piece.lastPositionY.toInt()/size] = 0
-
+                    updateMatrix(piece, jumpX, jumpY)
                 } else {
                     moveBack(piece)
                 }
