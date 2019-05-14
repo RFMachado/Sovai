@@ -43,6 +43,7 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
 
     private val listPiece: MutableList<Piece> = mutableListOf(piece1, piece2, piece3, piece4, piece5, piece6, piece7, piece8)
     lateinit var currentPiece: Piece
+    var mListener: OnCustomEventListener? = null
     var size: Int = 0
 
     @RequiresApi(Build.VERSION_CODES.KITKAT)
@@ -195,8 +196,10 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
     private fun showWinDialog(player: String) = AlertDialog.Builder(context).apply {
         setTitle(congrats)
         setMessage(context.getString(R.string.win, player))
-        setPositiveButton(ok) { _, _ -> }
-        setNegativeButton(backMenu) { _, _ -> }
+        setPositiveButton(ok) { d, _ -> }
+        setNegativeButton(backMenu) { _, _ ->
+            mListener?.onBackMenu()
+        }
 
         create()
         show()
