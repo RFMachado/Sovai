@@ -40,6 +40,12 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
     var mListener: OnCustomEventListener? = null
     var size: Int = 0
 
+    var lastX = 0f
+    var lastY = 0f
+
+    var showNextPlayed: Boolean = false
+    private val playedPaint = Paint()
+
     @RequiresApi(Build.VERSION_CODES.KITKAT)
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
@@ -49,6 +55,28 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
         val paint = createCheckerBoard(sizeWidth)
 
         canvas.drawPaint(paint)
+
+        if (::currentPiece.isInitialized && showNextPlayed) {
+            val width = sizeWidth.toFloat()
+            val boardRed = createSoVaiBoard(sizeWidth)
+            canvas.drawPaint(boardRed)
+
+            playedPaint.color = Color.GREEN
+            playedPaint.strokeWidth = 4f
+            playedPaint.alpha = 150
+            playedPaint.style = Paint.Style.FILL_AND_STROKE
+            canvas.drawRect(lastX + width, lastY, lastX + width * 2f,lastY + width, playedPaint) //right
+            canvas.drawRect(lastX - width, lastY, lastX,lastY + width, playedPaint) //left
+
+            canvas.drawRect(lastX, lastY - width, lastX + width, lastY, playedPaint) //top
+            canvas.drawRect(lastX, lastY + width, lastX + width, lastY + width * 2f, playedPaint) //bottom
+
+            canvas.drawRect(lastX + width, lastY - width, lastX + width * 2f, lastY + width, playedPaint) //top right
+            canvas.drawRect(lastX + width, lastY + width, lastX + width * 2f, lastY + width * 2f, playedPaint) //bottom right
+
+            canvas.drawRect(lastX - width, lastY - width, lastX, lastY, playedPaint) //top left
+            canvas.drawRect(lastX - width, lastY + width, lastX, lastY + width * 2f, playedPaint) //bottom left
+        }
 
         if (size == 0)
             multiply = sizeWidth
@@ -83,6 +111,27 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
         return paint
     }
 
+    private fun createSoVaiBoard(size: Int): Paint {
+        val bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
+
+        val fill = Paint()
+        fill.style = Paint.Style.STROKE
+        fill.color = Color.RED
+        fill.strokeWidth = 3f
+
+        val canvas = Canvas(bitmap)
+        val rect = Rect(0, 0, size, size)
+
+        canvas.drawRect(rect, fill)
+
+        rect.offset(size, size)
+        canvas.drawRect(rect, fill)
+
+        val paint = Paint()
+        paint.shader = BitmapShader(bitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT)
+        return paint
+    }
+
     override fun onTouchEvent(event: MotionEvent): Boolean {
 
         for(i in 0 until listPiece.size) {
@@ -96,12 +145,18 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
                         currentPiece.updateLastPosition(currentPiece.movingX, currentPiece.movingY)
                         currentPiece.isMoving = (event.x >= x && event.x <= x + currentPiece.icon.width &&
                                 event.y >= y && event.y <= y + currentPiece.icon.height)
+
+                        showNextPlayed = true
+
                     }
 
                 }
                 MotionEvent.ACTION_MOVE -> {
                     if (currentPiece.isMoving && playerTurn == currentPiece.player) {
                         currentPiece.updateNextPosition(event.x - currentPiece.icon.width / 2, event.y - currentPiece.icon.height / 2)
+
+                        lastX = currentPiece.lastPositionX
+                        lastY = currentPiece.lastPositionY
                         invalidate()
                     }
                 }
@@ -127,6 +182,8 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
 
                         checkWin()
                         currentPiece.isMoving = false
+                        showNextPlayed = false
+
                         invalidate()
                     }
                 }
