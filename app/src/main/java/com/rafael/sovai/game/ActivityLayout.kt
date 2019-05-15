@@ -36,6 +36,7 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
 
     private var listPiece: MutableList<Piece> = mutableListOf(piece1, piece2, piece3, piece4, piece5, piece6, piece7, piece8)
     lateinit var currentPiece: Piece
+    var playerTurn = 1
     var mListener: OnCustomEventListener? = null
     var size: Int = 0
 
@@ -91,13 +92,15 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
 
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
-                    currentPiece.updateLastPosition(currentPiece.movingX, currentPiece.movingY)
-                    currentPiece.isMoving = (event.x >= x && event.x <= x + currentPiece.icon.width &&
-                            event.y >= y && event.y <= y + currentPiece.icon.height)
+                    if (playerTurn == currentPiece.player) {
+                        currentPiece.updateLastPosition(currentPiece.movingX, currentPiece.movingY)
+                        currentPiece.isMoving = (event.x >= x && event.x <= x + currentPiece.icon.width &&
+                                event.y >= y && event.y <= y + currentPiece.icon.height)
+                    }
 
                 }
                 MotionEvent.ACTION_MOVE -> {
-                    if (currentPiece.isMoving) {
+                    if (currentPiece.isMoving && playerTurn == currentPiece.player) {
                         currentPiece.updateNextPosition(event.x - currentPiece.icon.width / 2, event.y - currentPiece.icon.height / 2)
                         invalidate()
                     }
@@ -115,6 +118,7 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
                             } else {
                                 currentPiece.updateNextPosition(currentPiece.xmatrix * size.toFloat(), currentPiece.ymatrix * size.toFloat())
                                 updateMatrix(currentPiece.xmatrix, currentPiece.ymatrix)
+                                playerTurn = updatePlayerTurn()
                             }
 
                         } else {
@@ -160,6 +164,7 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
                 if (matrix[jumpX][jumpY] == 0) {
                     updateNextPosition(jumpX * size.toFloat(), jumpY * size.toFloat())
                     updateMatrix(jumpX, jumpY)
+                    playerTurn = updatePlayerTurn()
                     return
                 }
             }
@@ -235,6 +240,8 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
             intArrayOf(0, 0, 0, 0, 0, 0, 2, 2),
             intArrayOf(0, 0, 0, 0, 0, 0, 2, 2)
     )
+
+    private fun updatePlayerTurn() = if (playerTurn == 1) 2 else 1
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, widthMeasureSpec)
