@@ -44,8 +44,8 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
     var lastX = 0f
     var lastY = 0f
 
-    var showNextPlayed: Boolean = false
-    private val playedPaint = Paint()
+    var showNextMove: Boolean = false
+    private val nextMovePaint = Paint()
 
     @RequiresApi(Build.VERSION_CODES.KITKAT)
     override fun onDraw(canvas: Canvas) {
@@ -57,8 +57,8 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
 
         canvas.drawPaint(paint)
 
-        if (showNextPlayed)
-            nextPlayed(sizeWidth, canvas)
+        if (showNextMove)
+            nextMove(sizeWidth, canvas)
 
         if (size == 0)
             multiply = sizeWidth
@@ -129,7 +129,7 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
                         currentPiece.isMoving = (event.x >= x && event.x <= x + currentPiece.icon.width &&
                                 event.y >= y && event.y <= y + currentPiece.icon.height)
 
-                        showNextPlayed = true
+                        showNextMove = true
 
                     }
 
@@ -165,7 +165,7 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
 
                         checkWin()
                         currentPiece.isMoving = false
-                        showNextPlayed = false
+                        showNextMove = false
 
                         invalidate()
                     }
@@ -283,17 +283,17 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
 
     private fun updatePlayerTurn() = if (playerTurn == 1) 2 else 1
 
-    private fun nextPlayed(sizeWidth: Int, canvas: Canvas) {
+    private fun nextMove(sizeWidth: Int, canvas: Canvas) {
         val boardRed = createSoVaiBoard(sizeWidth)
         canvas.drawPaint(boardRed)
 
         val xmatrix = (lastX / size).toInt()
         val ymatrix = (lastY / size).toInt()
 
-        playedPaint.color = Color.GREEN
-        playedPaint.strokeWidth = 4f
-        playedPaint.alpha = 150
-        playedPaint.style = Paint.Style.FILL_AND_STROKE
+        nextMovePaint.color = Color.GREEN
+        nextMovePaint.strokeWidth = 4f
+        nextMovePaint.alpha = 150
+        nextMovePaint.style = Paint.Style.FILL_AND_STROKE
 
         val width = sizeWidth.toFloat()
 
@@ -308,31 +308,31 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
         val bottomleft = matrix.getOrNull(xmatrix - 1)?.getOrNull(ymatrix + 1)
 
         if(right == 0 || right == playerTurn)
-            canvas.drawRect(lastX + width, lastY, lastX + width * 2f, lastY + width, playedPaint)
+            canvas.drawRect(lastX + width, lastY, lastX + width * 2f, lastY + width, nextMovePaint)
 
         if(left == 0 || left == playerTurn)
-            canvas.drawRect(lastX - width, lastY, lastX,lastY + width, playedPaint)
+            canvas.drawRect(lastX - width, lastY, lastX,lastY + width, nextMovePaint)
 
 
         if(top == 0 || top == playerTurn)
-            canvas.drawRect(lastX, lastY - width, lastX + width, lastY, playedPaint)
+            canvas.drawRect(lastX, lastY - width, lastX + width, lastY, nextMovePaint)
 
         if(bottom == 0 || bottom == playerTurn)
-            canvas.drawRect(lastX, lastY + width, lastX + width, lastY + width * 2f, playedPaint)
+            canvas.drawRect(lastX, lastY + width, lastX + width, lastY + width * 2f, nextMovePaint)
 
 
         if(topRight == 0 || topRight == playerTurn)
-            canvas.drawRect(lastX + width, lastY - width, lastX + width * 2f, lastY, playedPaint)
+            canvas.drawRect(lastX + width, lastY - width, lastX + width * 2f, lastY, nextMovePaint)
 
         if(bottomRight == 0 || bottomRight == playerTurn)
-            canvas.drawRect(lastX + width, lastY + width, lastX + width * 2f, lastY + width * 2f, playedPaint)
+            canvas.drawRect(lastX + width, lastY + width, lastX + width * 2f, lastY + width * 2f, nextMovePaint)
 
 
         if(topLeft == 0 || topLeft == playerTurn)
-            canvas.drawRect(lastX - width, lastY - width, lastX, lastY, playedPaint)
+            canvas.drawRect(lastX - width, lastY - width, lastX, lastY, nextMovePaint)
 
         if(bottomleft == 0 || bottomleft == playerTurn)
-            canvas.drawRect(lastX - width, lastY + width, lastX, lastY + width * 2f, playedPaint)
+            canvas.drawRect(lastX - width, lastY + width, lastX, lastY + width * 2f, nextMovePaint)
 
     }
 
