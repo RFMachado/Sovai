@@ -64,13 +64,13 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
         if (size == 0)
             multiply = sizeWidth
 
+        showWhatPieceCanMove(sizeWidth, canvas)
+
         listPiece.forEach { piece ->
             canvas.drawBitmap(piece.icon, piece.getx() * multiply, piece.gety() * multiply, null)
             piece.updateNextPosition(piece.getx() * multiply, piece.gety() * multiply)
         }
 
-
-        showWhatPieceCanMove(sizeWidth, canvas)
         size = sizeWidth
 
     }
