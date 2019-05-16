@@ -57,58 +57,8 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
 
         canvas.drawPaint(paint)
 
-        if (showNextPlayed) {
-            val boardRed = createSoVaiBoard(sizeWidth)
-            canvas.drawPaint(boardRed)
-
-            val xmatrix = (lastX / size).toInt()
-            val ymatrix = (lastY / size).toInt()
-
-            playedPaint.color = Color.GREEN
-            playedPaint.strokeWidth = 4f
-            playedPaint.alpha = 150
-            playedPaint.style = Paint.Style.FILL_AND_STROKE
-
-            val width = sizeWidth.toFloat()
-
-            val right = matrix.getOrNull(xmatrix + 1)?.getOrNull(ymatrix)
-            val left = matrix.getOrNull(xmatrix - 1)?.getOrNull(ymatrix)
-            val top = matrix.getOrNull(xmatrix)?.getOrNull(ymatrix - 1)
-            val bottom = matrix.getOrNull(xmatrix)?.getOrNull(ymatrix + 1)
-
-            val topRight = matrix.getOrNull(xmatrix + 1)?.getOrNull(ymatrix - 1)
-            val bottomRight = matrix.getOrNull(xmatrix + 1)?.getOrNull(ymatrix + 1)
-            val topLeft = matrix.getOrNull(xmatrix - 1)?.getOrNull(ymatrix - 1)
-            val bottomleft = matrix.getOrNull(xmatrix - 1)?.getOrNull(ymatrix + 1)
-
-            if(right == 0 || right == playerTurn)
-                canvas.drawRect(lastX + width, lastY, lastX + width * 2f, lastY + width, playedPaint)
-
-            if(left == 0 || left == playerTurn)
-                canvas.drawRect(lastX - width, lastY, lastX,lastY + width, playedPaint)
-
-
-            if(top == 0 || top == playerTurn)
-                canvas.drawRect(lastX, lastY - width, lastX + width, lastY, playedPaint)
-
-            if(bottom == 0 || bottom == playerTurn)
-                canvas.drawRect(lastX, lastY + width, lastX + width, lastY + width * 2f, playedPaint)
-
-
-            if(topRight == 0 || topRight == playerTurn)
-                canvas.drawRect(lastX + width, lastY - width, lastX + width * 2f, lastY, playedPaint)
-
-            if(bottomRight == 0 || bottomRight == playerTurn)
-                canvas.drawRect(lastX + width, lastY + width, lastX + width * 2f, lastY + width * 2f, playedPaint)
-
-
-            if(topLeft == 0 || topLeft == playerTurn)
-                canvas.drawRect(lastX - width, lastY - width, lastX, lastY, playedPaint)
-
-            if(bottomleft == 0 || bottomleft == playerTurn)
-                canvas.drawRect(lastX - width, lastY + width, lastX, lastY + width * 2f, playedPaint)
-
-         }
+        if (showNextPlayed)
+            nextPlayed(sizeWidth, canvas)
 
         if (size == 0)
             multiply = sizeWidth
@@ -332,6 +282,59 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
     )
 
     private fun updatePlayerTurn() = if (playerTurn == 1) 2 else 1
+
+    private fun nextPlayed(sizeWidth: Int, canvas: Canvas) {
+        val boardRed = createSoVaiBoard(sizeWidth)
+        canvas.drawPaint(boardRed)
+
+        val xmatrix = (lastX / size).toInt()
+        val ymatrix = (lastY / size).toInt()
+
+        playedPaint.color = Color.GREEN
+        playedPaint.strokeWidth = 4f
+        playedPaint.alpha = 150
+        playedPaint.style = Paint.Style.FILL_AND_STROKE
+
+        val width = sizeWidth.toFloat()
+
+        val right = matrix.getOrNull(xmatrix + 1)?.getOrNull(ymatrix)
+        val left = matrix.getOrNull(xmatrix - 1)?.getOrNull(ymatrix)
+        val top = matrix.getOrNull(xmatrix)?.getOrNull(ymatrix - 1)
+        val bottom = matrix.getOrNull(xmatrix)?.getOrNull(ymatrix + 1)
+
+        val topRight = matrix.getOrNull(xmatrix + 1)?.getOrNull(ymatrix - 1)
+        val bottomRight = matrix.getOrNull(xmatrix + 1)?.getOrNull(ymatrix + 1)
+        val topLeft = matrix.getOrNull(xmatrix - 1)?.getOrNull(ymatrix - 1)
+        val bottomleft = matrix.getOrNull(xmatrix - 1)?.getOrNull(ymatrix + 1)
+
+        if(right == 0 || right == playerTurn)
+            canvas.drawRect(lastX + width, lastY, lastX + width * 2f, lastY + width, playedPaint)
+
+        if(left == 0 || left == playerTurn)
+            canvas.drawRect(lastX - width, lastY, lastX,lastY + width, playedPaint)
+
+
+        if(top == 0 || top == playerTurn)
+            canvas.drawRect(lastX, lastY - width, lastX + width, lastY, playedPaint)
+
+        if(bottom == 0 || bottom == playerTurn)
+            canvas.drawRect(lastX, lastY + width, lastX + width, lastY + width * 2f, playedPaint)
+
+
+        if(topRight == 0 || topRight == playerTurn)
+            canvas.drawRect(lastX + width, lastY - width, lastX + width * 2f, lastY, playedPaint)
+
+        if(bottomRight == 0 || bottomRight == playerTurn)
+            canvas.drawRect(lastX + width, lastY + width, lastX + width * 2f, lastY + width * 2f, playedPaint)
+
+
+        if(topLeft == 0 || topLeft == playerTurn)
+            canvas.drawRect(lastX - width, lastY - width, lastX, lastY, playedPaint)
+
+        if(bottomleft == 0 || bottomleft == playerTurn)
+            canvas.drawRect(lastX - width, lastY + width, lastX, lastY + width * 2f, playedPaint)
+
+    }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, widthMeasureSpec)
