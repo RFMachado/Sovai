@@ -12,6 +12,7 @@ import com.rafael.sovai.game.models.Piece
 import android.support.v7.app.AlertDialog
 import com.rafael.sovai.main.OnCustomEventListener
 import com.rafael.sovai.R
+import com.rafael.sovai.Util.Util
 
 class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
@@ -19,8 +20,8 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
     private val playAgain by lazy { context.getString(R.string.play_again) }
     private val backMenu by lazy { context.getString(R.string.back_menu) }
 
-    private val iconPlayerOne = BitmapFactory.decodeResource(context.resources, R.drawable.blue_android)!!
-    private val iconPlayerTwo = BitmapFactory.decodeResource(context.resources, R.drawable.red_android)!!
+    private val iconPlayerOne = Util.getBitmap(context, R.drawable.circle_player_one)
+    private val iconPlayerTwo = Util.getBitmap(context, R.drawable.circle_player_two)
 
     private val piece1 = Piece(0F, 0F, 1, iconPlayerOne)
     private val piece2 = Piece(1F, 0F,1, iconPlayerOne)
@@ -56,27 +57,58 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
 
         canvas.drawPaint(paint)
 
-        if (::currentPiece.isInitialized && showNextPlayed) {
-            val width = sizeWidth.toFloat()
+        if (showNextPlayed) {
             val boardRed = createSoVaiBoard(sizeWidth)
             canvas.drawPaint(boardRed)
+
+            val xmatrix = (lastX / size).toInt()
+            val ymatrix = (lastY / size).toInt()
 
             playedPaint.color = Color.GREEN
             playedPaint.strokeWidth = 4f
             playedPaint.alpha = 150
             playedPaint.style = Paint.Style.FILL_AND_STROKE
-            canvas.drawRect(lastX + width, lastY, lastX + width * 2f,lastY + width, playedPaint) //right
-            canvas.drawRect(lastX - width, lastY, lastX,lastY + width, playedPaint) //left
 
-            canvas.drawRect(lastX, lastY - width, lastX + width, lastY, playedPaint) //top
-            canvas.drawRect(lastX, lastY + width, lastX + width, lastY + width * 2f, playedPaint) //bottom
+            val width = sizeWidth.toFloat()
 
-            canvas.drawRect(lastX + width, lastY - width, lastX + width * 2f, lastY + width, playedPaint) //top right
-            canvas.drawRect(lastX + width, lastY + width, lastX + width * 2f, lastY + width * 2f, playedPaint) //bottom right
+            val right = matrix.getOrNull(xmatrix + 1)?.getOrNull(ymatrix)
+            val left = matrix.getOrNull(xmatrix - 1)?.getOrNull(ymatrix)
+            val top = matrix.getOrNull(xmatrix)?.getOrNull(ymatrix - 1)
+            val bottom = matrix.getOrNull(xmatrix)?.getOrNull(ymatrix + 1)
 
-            canvas.drawRect(lastX - width, lastY - width, lastX, lastY, playedPaint) //top left
-            canvas.drawRect(lastX - width, lastY + width, lastX, lastY + width * 2f, playedPaint) //bottom left
-        }
+            val topRight = matrix.getOrNull(xmatrix + 1)?.getOrNull(ymatrix - 1)
+            val bottomRight = matrix.getOrNull(xmatrix + 1)?.getOrNull(ymatrix + 1)
+            val topLeft = matrix.getOrNull(xmatrix - 1)?.getOrNull(ymatrix - 1)
+            val bottomleft = matrix.getOrNull(xmatrix - 1)?.getOrNull(ymatrix + 1)
+
+            if(right == 0 || right == playerTurn)
+                canvas.drawRect(lastX + width, lastY, lastX + width * 2f, lastY + width, playedPaint)
+
+            if(left == 0 || left == playerTurn)
+                canvas.drawRect(lastX - width, lastY, lastX,lastY + width, playedPaint)
+
+
+            if(top == 0 || top == playerTurn)
+                canvas.drawRect(lastX, lastY - width, lastX + width, lastY, playedPaint)
+
+            if(bottom == 0 || bottom == playerTurn)
+                canvas.drawRect(lastX, lastY + width, lastX + width, lastY + width * 2f, playedPaint)
+
+
+            if(topRight == 0 || topRight == playerTurn)
+                canvas.drawRect(lastX + width, lastY - width, lastX + width * 2f, lastY, playedPaint)
+
+            if(bottomRight == 0 || bottomRight == playerTurn)
+                canvas.drawRect(lastX + width, lastY + width, lastX + width * 2f, lastY + width * 2f, playedPaint)
+
+
+            if(topLeft == 0 || topLeft == playerTurn)
+                canvas.drawRect(lastX - width, lastY - width, lastX, lastY, playedPaint)
+
+            if(bottomleft == 0 || bottomleft == playerTurn)
+                canvas.drawRect(lastX - width, lastY + width, lastX, lastY + width * 2f, playedPaint)
+
+         }
 
         if (size == 0)
             multiply = sizeWidth
