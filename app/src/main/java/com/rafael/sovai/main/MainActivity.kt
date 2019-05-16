@@ -27,6 +27,10 @@ class MainActivity : AppCompatActivity() {
         btnLeave.setOnClickListener {
             finish()
         }
+
+        btnRules.setOnClickListener {
+
+        }
     }
 
 }

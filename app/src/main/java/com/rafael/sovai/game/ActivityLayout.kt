@@ -147,8 +147,9 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
         val bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
 
         val fill = Paint()
-        fill.style = Paint.Style.STROKE
+        fill.style = Paint.Style.FILL
         fill.color = Color.RED
+        fill.alpha = 120
         fill.strokeWidth = 3f
 
         val canvas = Canvas(bitmap)
