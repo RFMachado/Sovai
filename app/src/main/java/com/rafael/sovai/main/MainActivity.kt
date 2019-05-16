@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import com.rafael.sovai.R
 import com.rafael.sovai.game.GameActivity
+import com.rafael.sovai.rules.RulesActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -29,7 +30,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         btnRules.setOnClickListener {
-
+            val intent = RulesActivity.launchIntent(this)
+            startActivity(intent)
         }
     }
 

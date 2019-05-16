@@ -12,7 +12,7 @@ import com.rafael.sovai.game.models.Piece
 import android.support.v7.app.AlertDialog
 import com.rafael.sovai.main.OnCustomEventListener
 import com.rafael.sovai.R
-import com.rafael.sovai.Util.Util
+import util.Util
 
 class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
@@ -234,7 +234,7 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
     private fun showWinDialog(player: String) = AlertDialog.Builder(context).apply {
         setTitle(congrats)
         setMessage(context.getString(R.string.win, player))
-        setPositiveButton(playAgain) { d, _ ->
+        setPositiveButton(playAgain) { _, _ ->
             restartGame()
         }
         setNegativeButton(backMenu) { _, _ ->
