@@ -46,6 +46,7 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
 
     var showNextMove: Boolean = false
     private val nextMovePaint = Paint()
+    private val canMovePaint = Paint()
 
     @RequiresApi(Build.VERSION_CODES.KITKAT)
     override fun onDraw(canvas: Canvas) {
@@ -68,6 +69,8 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
             piece.updateNextPosition(piece.getx() * multiply, piece.gety() * multiply)
         }
 
+
+        showWhatPieceCanMove(sizeWidth, canvas)
         size = sizeWidth
 
     }
@@ -282,6 +285,23 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
     )
 
     private fun updatePlayerTurn() = if (playerTurn == 1) 2 else 1
+
+    private fun showWhatPieceCanMove(sizeWidth: Int, canvas: Canvas) {
+        val width = sizeWidth.toFloat()
+
+        canMovePaint.color = Color.GREEN
+        canMovePaint.strokeWidth = 4f
+        canMovePaint.style = Paint.Style.STROKE
+
+        matrix.forEachIndexed { i, line ->
+            line.forEachIndexed { j, item ->
+                if (item == playerTurn) {
+                    canvas.drawRect(i * width, j * width, i * width + width, j * width + width, canMovePaint)
+                }
+            }
+        }
+
+    }
 
     private fun nextMove(sizeWidth: Int, canvas: Canvas) {
         val boardNotAllowedMove = createNotAllowedMoveBoard(sizeWidth)
