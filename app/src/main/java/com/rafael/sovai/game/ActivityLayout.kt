@@ -93,7 +93,7 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
         return paint
     }
 
-    private fun createSoVaiBoard(size: Int): Paint {
+    private fun createNotAllowedMoveBoard(size: Int): Paint {
         val bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
 
         val fill = Paint()
@@ -284,8 +284,8 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
     private fun updatePlayerTurn() = if (playerTurn == 1) 2 else 1
 
     private fun nextMove(sizeWidth: Int, canvas: Canvas) {
-        val boardRed = createSoVaiBoard(sizeWidth)
-        canvas.drawPaint(boardRed)
+        val boardNotAllowedMove = createNotAllowedMoveBoard(sizeWidth)
+        canvas.drawPaint(boardNotAllowedMove)
 
         val xmatrix = (lastX / size).toInt()
         val ymatrix = (lastY / size).toInt()
