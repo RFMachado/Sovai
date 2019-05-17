@@ -20,6 +20,14 @@ class RulesActivity: AppCompatActivity() {
         webView.settings.javaScriptEnabled = true
         webView.loadUrl("file:///android_asset/rules.html")
 
+        bindListeners()
+
+    }
+
+    private fun bindListeners() {
+        btnBack.setOnClickListener {
+            onBackPressed()
+        }
     }
 
     override fun onDestroy() {

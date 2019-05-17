@@ -185,13 +185,12 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
     }
 
     private fun checkWin() {
-        if (matrix[6][6] == 1 && matrix[6][7] == 1 && matrix[7][6] == 1 && matrix[7][7] == 1) {
+        if (matrix[6][6] == 1 && matrix[6][7] == 1 && matrix[7][6] == 1 && matrix[7][7] == 1)
             showWinDialog("1")
-        }
 
-        if (matrix[0][0] == 2 && matrix[0][1] == 2 && matrix[1][0] == 2 && matrix[1][1] == 2) {
+        if (matrix[0][0] == 2 && matrix[0][1] == 2 && matrix[1][0] == 2 && matrix[1][1] == 2)
             showWinDialog("2")
-        }
+
     }
 
     private fun updateMatrix(x: Int, y: Int) = with(currentPiece) {
