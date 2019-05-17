@@ -5,13 +5,13 @@ import android.graphics.*
 import android.graphics.Paint.ANTI_ALIAS_FLAG
 import android.os.Build
 import android.support.annotation.RequiresApi
+import android.support.v7.app.AlertDialog
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
-import com.rafael.sovai.game.models.Piece
-import android.support.v7.app.AlertDialog
-import com.rafael.sovai.main.OnCustomEventListener
 import com.rafael.sovai.R
+import com.rafael.sovai.game.models.Piece
+import com.rafael.sovai.main.OnCustomEventListener
 import util.Util
 
 class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attrs) {
@@ -45,6 +45,7 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
     var lastY = 0f
 
     var showNextMove: Boolean = false
+    var isMovingPiece: Boolean = false
     private val nextMovePaint = Paint()
     private val canMovePaint = Paint()
 
@@ -64,7 +65,8 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
         if (size == 0)
             multiply = sizeWidth
 
-        showWhatPieceCanMove(sizeWidth, canvas)
+        if (!isMovingPiece)
+            showWhatPieceCanMove(sizeWidth, canvas)
 
         listPiece.forEach { piece ->
             canvas.drawBitmap(piece.icon, piece.getx() * multiply, piece.gety() * multiply, null)
@@ -132,6 +134,7 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
                         currentPiece.isMoving = (event.x >= x && event.x <= x + currentPiece.icon.width &&
                                 event.y >= y && event.y <= y + currentPiece.icon.height)
 
+                        isMovingPiece = true
                         showNextMove = true
 
                     }
@@ -167,6 +170,8 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
                         }
 
                         checkWin()
+
+                        isMovingPiece = false
                         currentPiece.isMoving = false
                         showNextMove = false
 
@@ -180,11 +185,11 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
     }
 
     private fun checkWin() {
-        if(matrix[6][6] == 1 && matrix[6][7] == 1 && matrix[7][6] == 1 && matrix[7][7] == 1) {
+        if (matrix[6][6] == 1 && matrix[6][7] == 1 && matrix[7][6] == 1 && matrix[7][7] == 1) {
             showWinDialog("1")
         }
 
-        if(matrix[0][0] == 2 && matrix[0][1] == 2 && matrix[1][0] == 2 && matrix[1][1] == 2) {
+        if (matrix[0][0] == 2 && matrix[0][1] == 2 && matrix[1][0] == 2 && matrix[1][1] == 2) {
             showWinDialog("2")
         }
     }
@@ -196,11 +201,8 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
 
     private fun jump() = with(currentPiece) {
         if (matrix[xmatrix][ymatrix] == player) {
-            val diffX = xmatrix - lastPositionX.toInt()/size
-            val diffY = ymatrix - lastPositionY.toInt()/size
-
-            val jumpX= xmatrix + diffX
-            val jumpY= ymatrix + diffY
+            val jumpX= 2 * xmatrix - lastPositionX.toInt()/size
+            val jumpY= 2 * ymatrix - lastPositionY.toInt()/size
 
             if (jumpX in 0..7 && jumpY in 0..7) {
 
@@ -313,7 +315,7 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
         nextMovePaint.color = Color.GREEN
         nextMovePaint.strokeWidth = 4f
         nextMovePaint.alpha = 150
-        nextMovePaint.style = Paint.Style.FILL_AND_STROKE
+        nextMovePaint.style = Paint.Style.FILL
 
         val width = sizeWidth.toFloat()
 
@@ -327,31 +329,42 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
         val topLeft = matrix.getOrNull(xmatrix - 1)?.getOrNull(ymatrix - 1)
         val bottomleft = matrix.getOrNull(xmatrix - 1)?.getOrNull(ymatrix + 1)
 
-        if(right == 0 || right == playerTurn)
+        val jumpRight = matrix.getOrNull(xmatrix + 2)?.getOrNull(ymatrix)
+        val jumpLeft = matrix.getOrNull(xmatrix - 2)?.getOrNull(ymatrix)
+        val jumpTop = matrix.getOrNull(xmatrix)?.getOrNull(ymatrix - 2)
+        val jumpBottom = matrix.getOrNull(xmatrix)?.getOrNull(ymatrix + 2)
+
+        val jumpTopRight = matrix.getOrNull(xmatrix + 2)?.getOrNull(ymatrix - 2)
+        val jumpBottomRight = matrix.getOrNull(xmatrix + 2)?.getOrNull(ymatrix + 2)
+        val jumpTopLeft = matrix.getOrNull(xmatrix - 2)?.getOrNull(ymatrix - 2)
+        val jumpBottomleft = matrix.getOrNull(xmatrix - 2)?.getOrNull(ymatrix + 2)
+
+
+        if (right == 0 || (right == playerTurn && jumpRight == 0))
             canvas.drawRect(lastX + width, lastY, lastX + width * 2f, lastY + width, nextMovePaint)
 
-        if(left == 0 || left == playerTurn)
+        if (left == 0 || (left == playerTurn && jumpLeft == 0))
             canvas.drawRect(lastX - width, lastY, lastX,lastY + width, nextMovePaint)
 
 
-        if(top == 0 || top == playerTurn)
+        if (top == 0 || (top == playerTurn && jumpTop == 0))
             canvas.drawRect(lastX, lastY - width, lastX + width, lastY, nextMovePaint)
 
-        if(bottom == 0 || bottom == playerTurn)
+        if (bottom == 0 || (bottom == playerTurn && jumpBottom == 0))
             canvas.drawRect(lastX, lastY + width, lastX + width, lastY + width * 2f, nextMovePaint)
 
 
-        if(topRight == 0 || topRight == playerTurn)
+        if (topRight == 0 || (topRight == playerTurn && jumpTopRight == 0))
             canvas.drawRect(lastX + width, lastY - width, lastX + width * 2f, lastY, nextMovePaint)
 
-        if(bottomRight == 0 || bottomRight == playerTurn)
+        if (bottomRight == 0 || (bottomRight == playerTurn && jumpBottomRight == 0))
             canvas.drawRect(lastX + width, lastY + width, lastX + width * 2f, lastY + width * 2f, nextMovePaint)
 
 
-        if(topLeft == 0 || topLeft == playerTurn)
+        if (topLeft == 0 || (topLeft == playerTurn && jumpTopLeft == 0))
             canvas.drawRect(lastX - width, lastY - width, lastX, lastY, nextMovePaint)
 
-        if(bottomleft == 0 || bottomleft == playerTurn)
+        if (bottomleft == 0 || (bottomleft == playerTurn && jumpBottomleft == 0))
             canvas.drawRect(lastX - width, lastY + width, lastX, lastY + width * 2f, nextMovePaint)
 
     }
