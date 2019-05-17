@@ -327,7 +327,7 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
         val topRight = matrix.getOrNull(xmatrix + 1)?.getOrNull(ymatrix - 1)
         val bottomRight = matrix.getOrNull(xmatrix + 1)?.getOrNull(ymatrix + 1)
         val topLeft = matrix.getOrNull(xmatrix - 1)?.getOrNull(ymatrix - 1)
-        val bottomleft = matrix.getOrNull(xmatrix - 1)?.getOrNull(ymatrix + 1)
+        val bottomLeft = matrix.getOrNull(xmatrix - 1)?.getOrNull(ymatrix + 1)
 
         val jumpRight = matrix.getOrNull(xmatrix + 2)?.getOrNull(ymatrix)
         val jumpLeft = matrix.getOrNull(xmatrix - 2)?.getOrNull(ymatrix)
@@ -337,7 +337,7 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
         val jumpTopRight = matrix.getOrNull(xmatrix + 2)?.getOrNull(ymatrix - 2)
         val jumpBottomRight = matrix.getOrNull(xmatrix + 2)?.getOrNull(ymatrix + 2)
         val jumpTopLeft = matrix.getOrNull(xmatrix - 2)?.getOrNull(ymatrix - 2)
-        val jumpBottomleft = matrix.getOrNull(xmatrix - 2)?.getOrNull(ymatrix + 2)
+        val jumpBottomLeft = matrix.getOrNull(xmatrix - 2)?.getOrNull(ymatrix + 2)
 
 
         if (right == 0 || (right == playerTurn && jumpRight == 0))
@@ -364,7 +364,7 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
         if (topLeft == 0 || (topLeft == playerTurn && jumpTopLeft == 0))
             canvas.drawRect(lastX - width, lastY - width, lastX, lastY, nextMovePaint)
 
-        if (bottomleft == 0 || (bottomleft == playerTurn && jumpBottomleft == 0))
+        if (bottomLeft == 0 || (bottomLeft == playerTurn && jumpBottomLeft == 0))
             canvas.drawRect(lastX - width, lastY + width, lastX, lastY + width * 2f, nextMovePaint)
 
     }
