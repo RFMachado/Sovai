@@ -69,8 +69,9 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
             showWhatPieceCanMove(sizeWidth, canvas)
 
         listPiece.forEach { piece ->
-            canvas.drawBitmap(piece.icon, piece.getx() * multiply, piece.gety() * multiply, null)
-            piece.updateNextPosition(piece.getx() * multiply, piece.gety() * multiply)
+            canvas.drawBitmap(piece.icon, piece.movingX * multiply, piece.movingY * multiply, null)
+            piece.movingX = piece.movingX * multiply
+            piece.movingY = piece.movingY * multiply
         }
 
         size = sizeWidth
@@ -124,13 +125,14 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
 
         for(i in 0 until listPiece.size) {
             currentPiece = listPiece[i]
-            val x = currentPiece.getx()
-            val y = currentPiece.gety()
+            val x = currentPiece.movingX
+            val y = currentPiece.movingY
 
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
                     if (playerTurn == currentPiece.player) {
-                        currentPiece.updateLastPosition(currentPiece.movingX, currentPiece.movingY)
+                        currentPiece.lastPositionX = currentPiece.movingX
+                        currentPiece.lastPositionY = currentPiece.movingY
                         currentPiece.isMoving = (event.x >= x && event.x <= x + currentPiece.icon.width &&
                                 event.y >= y && event.y <= y + currentPiece.icon.height)
 
@@ -142,7 +144,8 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
                 }
                 MotionEvent.ACTION_MOVE -> {
                     if (currentPiece.isMoving && playerTurn == currentPiece.player) {
-                        currentPiece.updateNextPosition(event.x - currentPiece.icon.width / 2, event.y - currentPiece.icon.height / 2)
+                        currentPiece.movingX = event.x - currentPiece.icon.width / 2
+                        currentPiece.movingY = event.y - currentPiece.icon.height / 2
 
                         lastX = currentPiece.lastPositionX
                         lastY = currentPiece.lastPositionY
@@ -160,7 +163,9 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
                                 jump()
 
                             } else {
-                                currentPiece.updateNextPosition(currentPiece.xmatrix * size.toFloat(), currentPiece.ymatrix * size.toFloat())
+                                currentPiece.movingX = currentPiece.xmatrix * size.toFloat()
+                                currentPiece.movingY = currentPiece.ymatrix * size.toFloat()
+
                                 updateMatrix(currentPiece.xmatrix, currentPiece.ymatrix)
                                 playerTurn = updatePlayerTurn()
                             }
@@ -206,7 +211,8 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
             if (jumpX in 0..7 && jumpY in 0..7) {
 
                 if (matrix[jumpX][jumpY] == 0) {
-                    updateNextPosition(jumpX * size.toFloat(), jumpY * size.toFloat())
+                    movingX = jumpX * size.toFloat()
+                    movingY = jumpY * size.toFloat()
                     updateMatrix(jumpX, jumpY)
                     playerTurn = updatePlayerTurn()
                     return
@@ -232,7 +238,8 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
     private fun needToJump() = matrix[currentPiece.xmatrix][currentPiece.ymatrix] != 0
 
     private fun moveBack() = with(currentPiece) {
-        updateNextPosition(lastPositionX, lastPositionY)
+        movingX = lastPositionX
+        movingY = lastPositionY
     }
 
     private fun showWinDialog(player: String) = AlertDialog.Builder(context).apply {
