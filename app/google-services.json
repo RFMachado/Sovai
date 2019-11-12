@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "931125428438",
+    "firebase_url": "https://so-vai-43c3d.firebaseio.com",
+    "project_id": "so-vai-43c3d",
+    "storage_bucket": "so-vai-43c3d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:931125428438:android:defb988a71ec0592668977",
+        "android_client_info": {
+          "package_name": "com.rafael.sovai"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "931125428438-3c4p605pes48p6q04le272s2a6rq23da.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAY6qASknnkJGqev40l5O3lPq5KdwExc3o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "931125428438-3c4p605pes48p6q04le272s2a6rq23da.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

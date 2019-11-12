@@ -2,8 +2,8 @@ package com.rafael.sovai.main
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.rafael.sovai.R
 import com.rafael.sovai.game.GameActivity
 import com.rafael.sovai.rules.RulesActivity
