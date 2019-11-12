@@ -4,8 +4,8 @@ import android.content.Context
 import android.graphics.*
 import android.graphics.Paint.ANTI_ALIAS_FLAG
 import android.os.Build
-import android.support.annotation.RequiresApi
-import android.support.v7.app.AlertDialog
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
