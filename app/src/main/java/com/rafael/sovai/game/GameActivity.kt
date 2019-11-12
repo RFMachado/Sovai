@@ -7,8 +7,7 @@ import com.rafael.sovai.main.OnCustomEventListener
 import com.rafael.sovai.R
 import kotlinx.android.synthetic.main.activity_game.*
 
-
-class GameActivity: AppCompatActivity(), OnCustomEventListener {
+class GameActivity : AppCompatActivity(), OnCustomEventListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,5 +21,4 @@ class GameActivity: AppCompatActivity(), OnCustomEventListener {
         startActivity(intent)
         finish()
     }
-
 }

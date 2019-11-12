@@ -5,7 +5,6 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import androidx.core.content.ContextCompat
 
-
 object Util {
 
     fun getBitmap(context: Context, drawableRes: Int): Bitmap {
@@ -21,5 +20,4 @@ object Util {
 
         return bitmap
     }
-
 }

@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.rafael.sovai.R
 import kotlinx.android.synthetic.main.activity_rules.*
 
-class RulesActivity: AppCompatActivity() {
+class RulesActivity : AppCompatActivity() {
 
     companion object {
         fun launchIntent(context: Context) = Intent(context, RulesActivity::class.java)
@@ -21,7 +21,6 @@ class RulesActivity: AppCompatActivity() {
         webView.loadUrl("file:///android_asset/rules.html")
 
         bindListeners()
-
     }
 
     private fun bindListeners() {
@@ -34,5 +33,4 @@ class RulesActivity: AppCompatActivity() {
         webView.destroy()
         super.onDestroy()
     }
-
 }

@@ -24,8 +24,8 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
     private val iconPlayerTwo = Util.getBitmap(context, R.drawable.circle_player_two)
 
     private val piece1 = Piece(0F, 0F, 1, iconPlayerOne)
-    private val piece2 = Piece(1F, 0F,1, iconPlayerOne)
-    private val piece3 = Piece(0F, 1F,1, iconPlayerOne)
+    private val piece2 = Piece(1F, 0F, 1, iconPlayerOne)
+    private val piece3 = Piece(0F, 1F, 1, iconPlayerOne)
     private val piece4 = Piece(1F, 1F, 1, iconPlayerOne)
 
     private val piece5 = Piece(6F, 6F, 2, iconPlayerTwo)
@@ -74,9 +74,7 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
         }
 
         size = sizeWidth
-
     }
-
 
     private fun createCheckerBoard(size: Int): Paint {
         val bitmap = Bitmap.createBitmap(size * 2, size * 2, Bitmap.Config.ARGB_8888)
@@ -122,7 +120,7 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
 
-        for(i in 0 until listPiece.size) {
+        for (i in 0 until listPiece.size) {
             currentPiece = listPiece[i]
             val x = currentPiece.getx()
             val y = currentPiece.gety()
@@ -136,9 +134,7 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
 
                         isMovingPiece = true
                         showNextMove = true
-
                     }
-
                 }
                 MotionEvent.ACTION_MOVE -> {
                     if (currentPiece.isMoving && playerTurn == currentPiece.player) {
@@ -158,13 +154,11 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
 
                             if (needToJump()) {
                                 jump()
-
                             } else {
                                 currentPiece.updateNextPosition(currentPiece.xmatrix * size.toFloat(), currentPiece.ymatrix * size.toFloat())
                                 updateMatrix(currentPiece.xmatrix, currentPiece.ymatrix)
                                 playerTurn = updatePlayerTurn()
                             }
-
                         } else {
                             moveBack()
                         }
@@ -190,18 +184,17 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
 
         if (matrix[0][0] == 2 && matrix[0][1] == 2 && matrix[1][0] == 2 && matrix[1][1] == 2)
             showWinDialog("2")
-
     }
 
     private fun updateMatrix(x: Int, y: Int) = with(currentPiece) {
         matrix[x][y] = player
-        matrix[lastPositionX.toInt()/size][lastPositionY.toInt()/size] = 0
+        matrix[lastPositionX.toInt() / size][lastPositionY.toInt() / size] = 0
     }
 
     private fun jump() = with(currentPiece) {
         if (matrix[xmatrix][ymatrix] == player) {
-            val jumpX= 2 * xmatrix - lastPositionX.toInt()/size
-            val jumpY= 2 * ymatrix - lastPositionY.toInt()/size
+            val jumpX = 2 * xmatrix - lastPositionX.toInt() / size
+            val jumpY = 2 * ymatrix - lastPositionY.toInt() / size
 
             if (jumpX in 0..7 && jumpY in 0..7) {
 
@@ -218,15 +211,14 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
     }
 
     private fun canMoveOneStep(): Boolean {
-        val lastPositionX = currentPiece.lastPositionX.toInt()/size
-        val lastPositionY = currentPiece.lastPositionY.toInt()/size
+        val lastPositionX = currentPiece.lastPositionX.toInt() / size
+        val lastPositionY = currentPiece.lastPositionY.toInt() / size
 
         val currentX = currentPiece.xmatrix
         val currentY = currentPiece.ymatrix
 
-        return ( (currentX >= (lastPositionX - 1)) && (currentX <= (lastPositionX + 1)) &&
-                (currentY >= (lastPositionY - 1)) && (currentY <= (lastPositionY + 1)) )
-
+        return ((currentX >= (lastPositionX - 1)) && (currentX <= (lastPositionX + 1)) &&
+                (currentY >= (lastPositionY - 1)) && (currentY <= (lastPositionY + 1)))
     }
 
     private fun needToJump() = matrix[currentPiece.xmatrix][currentPiece.ymatrix] != 0
@@ -262,8 +254,8 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
 
     private fun initializePieces(): MutableList<Piece> {
         val piece1 = Piece(0F, 0F, 1, iconPlayerOne)
-        val piece2 = Piece(1F, 0F,1, iconPlayerOne)
-        val piece3 = Piece(0F, 1F,1, iconPlayerOne)
+        val piece2 = Piece(1F, 0F, 1, iconPlayerOne)
+        val piece3 = Piece(0F, 1F, 1, iconPlayerOne)
         val piece4 = Piece(1F, 1F, 1, iconPlayerOne)
 
         val piece5 = Piece(6F, 6F, 2, iconPlayerTwo)
@@ -301,7 +293,6 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
                 }
             }
         }
-
     }
 
     private fun nextMove(sizeWidth: Int, canvas: Canvas) {
@@ -338,13 +329,11 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
         val jumpTopLeft = matrix.getOrNull(xmatrix - 2)?.getOrNull(ymatrix - 2)
         val jumpBottomLeft = matrix.getOrNull(xmatrix - 2)?.getOrNull(ymatrix + 2)
 
-
         if (right == 0 || (right == playerTurn && jumpRight == 0))
             canvas.drawRect(lastX + width, lastY, lastX + width * 2f, lastY + width, nextMovePaint)
 
         if (left == 0 || (left == playerTurn && jumpLeft == 0))
-            canvas.drawRect(lastX - width, lastY, lastX,lastY + width, nextMovePaint)
-
+            canvas.drawRect(lastX - width, lastY, lastX, lastY + width, nextMovePaint)
 
         if (top == 0 || (top == playerTurn && jumpTop == 0))
             canvas.drawRect(lastX, lastY - width, lastX + width, lastY, nextMovePaint)
@@ -352,24 +341,20 @@ class ActivityLayout(context: Context, attrs: AttributeSet) : View(context, attr
         if (bottom == 0 || (bottom == playerTurn && jumpBottom == 0))
             canvas.drawRect(lastX, lastY + width, lastX + width, lastY + width * 2f, nextMovePaint)
 
-
         if (topRight == 0 || (topRight == playerTurn && jumpTopRight == 0))
             canvas.drawRect(lastX + width, lastY - width, lastX + width * 2f, lastY, nextMovePaint)
 
         if (bottomRight == 0 || (bottomRight == playerTurn && jumpBottomRight == 0))
             canvas.drawRect(lastX + width, lastY + width, lastX + width * 2f, lastY + width * 2f, nextMovePaint)
 
-
         if (topLeft == 0 || (topLeft == playerTurn && jumpTopLeft == 0))
             canvas.drawRect(lastX - width, lastY - width, lastX, lastY, nextMovePaint)
 
         if (bottomLeft == 0 || (bottomLeft == playerTurn && jumpBottomLeft == 0))
             canvas.drawRect(lastX - width, lastY + width, lastX, lastY + width * 2f, nextMovePaint)
-
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, widthMeasureSpec)
     }
-
 }

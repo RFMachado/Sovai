@@ -24,5 +24,4 @@ class Piece(x: Float, y: Float, val player: Int, val icon: Bitmap) {
 
     fun getx(): Float = movingX
     fun gety(): Float = movingY
-
 }
