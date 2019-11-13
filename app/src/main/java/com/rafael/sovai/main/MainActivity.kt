@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.rafael.sovai.R
 import com.rafael.sovai.game.GameActivity
+import com.rafael.sovai.online.OnlineActivity
 import com.rafael.sovai.rules.RulesActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -19,8 +20,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        btnPlay.setOnClickListener {
+        btnTwoPlayers.setOnClickListener {
             val intent = Intent(this, GameActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
+        btnOnline.setOnClickListener {
+            val intent = Intent(this, OnlineActivity::class.java)
             startActivity(intent)
             finish()
         }

@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">Só vai</string>
     <string name="play">Jogar</string>
+
+    <string name="two_players">2 Jogadores</string>
+    <string name="online">Online</string>
+
     <string name="leave">Sair</string>
     <string name="rules">Regras</string>
     <string name="play_again">Jogar Novamente</string>

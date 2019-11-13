@@ -2,9 +2,9 @@ package com.rafael.sovai.game
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.rafael.sovai.R
 import com.rafael.sovai.main.MainActivity
 import com.rafael.sovai.main.OnCustomEventListener
-import com.rafael.sovai.R
 import kotlinx.android.synthetic.main.activity_game.*
 
 class GameActivity : AppCompatActivity(), OnCustomEventListener {
